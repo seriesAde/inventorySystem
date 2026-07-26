@@ -52,3 +52,20 @@ export const deactivateSupplier = asyncHandler(async (req, res) => {
         message: 'supplier deactivated'
     })
 })
+
+export const reactivateSupplier = asyncHandler(async (req, res) => {
+    const supplier = await Supplier.findById(req.params.id)
+    if (!supplier) throw new ApiError(404, 'supplier not found')
+    supplier.isActive = true
+    await supplier.save();
+    res.status(200).json({
+        success: true,
+        message: 'supplier deactivated'
+    })
+})
+
+export const deleteSupplier = asyncHandler(async (req, res) => {
+    const supplier = await Supplier.findByIdAndDelete(req.params.id);
+    if (!supplier) throw new ApiError(404, 'Supplier not found');
+    res.status(200).json({ success: true, message: 'Supplier permanently deleted' });
+});

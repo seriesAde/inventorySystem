@@ -7,7 +7,13 @@ import asyncHandler from './utilities/asyncHandler.js';
 import { connectDB } from './config/db.js';
 import userRoutes from './Routes/user.route.js'
 import warehouseRoutes from './Routes/warehouse.route.js'
-import productroutes from './Routes/product.routes.js'
+import productRoutes from './Routes/product.route.js'
+import categoryRoutes from './Routes/category.route.js'
+import purchaseRoutes from './Routes/purchase.route.js'
+import supplierRoutes from './Routes/suppplier.route.js'
+import saleRoutes from './Routes/sale.route.js'
+import stockAdjustmentRoutes from './Routes/stockAdjustment.route.js'
+import stockRoutes from './Routes/stock.route.js'
 
 
 
@@ -26,7 +32,13 @@ app.use(express.json());
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/warehouses', warehouseRoutes);
-app.use('/api/v1/products', productroutes);
+app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/categories', categoryRoutes);
+app.use('/api/v1/suppliers', supplierRoutes);
+app.use('/api/v1/purchases', purchaseRoutes);
+app.use('/api/v1/sales', saleRoutes);
+app.use('/api/v1/stocks', stockAdjustmentRoutes);
+app.use('/api/v1/getstocks', stockRoutes);
 
 
 

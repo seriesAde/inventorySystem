@@ -52,3 +52,17 @@ export const deactivateWarehouse = asyncHandler(async (req, res) => {
         message: 'warehouse deactivated'
     })
 })
+
+export const reactivateWarehouse = asyncHandler(async (req, res) => {
+    const warehouse = await Warehouse.findById(req.params.id);
+    if (!warehouse) throw new ApiError(404, 'Warehouse not found');
+    warehouse.isActive = true;
+    await warehouse.save();
+    res.status(200).json({ success: true, message: 'Warehouse reactivated', data: warehouse });
+});
+
+export const deleteWarehouse = asyncHandler(async (req, res) => {
+    const warehouse = await Warehouse.findByIdAndDelete(req.params.id);
+    if (!warehouse) throw new ApiError(404, 'Warehouse not found');
+    res.status(200).json({ success: true, message: 'Warehouse permanently deleted' });
+});
