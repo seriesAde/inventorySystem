@@ -73,3 +73,32 @@ export const createUser = asyncHandler(async (req, res) => {
     })
 
 })
+
+
+export const deactivateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) throw new ApiError(404, 'User not found');
+    if (req.params.id === req.user.id) {
+        throw new ApiError(400, 'You cannot deactivate or delete your own account');
+    }
+    user.isActive = false;
+    await user.save();
+    res.status(200).json({ success: true, message: 'User deactivated' });
+});
+
+export const reactivateUser = asyncHandler(async (req, res) => {
+    if (!user) throw new ApiError(404, 'User not found');
+    user.isActive = true;
+    const user = await User.findById(req.params.id);
+    await user.save();
+    res.status(200).json({ success: true, message: 'User reactivated' });
+});
+
+export const deleteUser = asyncHandler(async (req, res) => {
+    if (req.params.id === req.user.id) {
+        throw new ApiError(400, 'You cannot deactivate or delete your own account');
+    }
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) throw new ApiError(404, 'User not found');
+    res.status(200).json({ success: true, message: 'User permanently deleted' });
+});

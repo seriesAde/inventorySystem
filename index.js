@@ -12,8 +12,8 @@ import categoryRoutes from './Routes/category.route.js'
 import purchaseRoutes from './Routes/purchase.route.js'
 import supplierRoutes from './Routes/suppplier.route.js'
 import saleRoutes from './Routes/sale.route.js'
-import stockAdjustmentRoutes from './Routes/stockAdjustment.route.js'
 import stockRoutes from './Routes/stock.route.js'
+
 
 
 
@@ -37,8 +37,8 @@ app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/suppliers', supplierRoutes);
 app.use('/api/v1/purchases', purchaseRoutes);
 app.use('/api/v1/sales', saleRoutes);
-app.use('/api/v1/stocks', stockAdjustmentRoutes);
-app.use('/api/v1/getstocks', stockRoutes);
+app.use('/api/v1/stocks', stockRoutes);
+
 
 
 

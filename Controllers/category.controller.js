@@ -59,7 +59,7 @@ export const reactivateCategory = asyncHandler(async (req, res) => {
     await category.save();
     res.status(200).json({
         success: true,
-        message: 'category deactivated'
+        message: 'category reactivated'
     })
 })
 

@@ -60,7 +60,7 @@ export const reactivateSupplier = asyncHandler(async (req, res) => {
     await supplier.save();
     res.status(200).json({
         success: true,
-        message: 'supplier deactivated'
+        message: 'supplier reactivated'
     })
 })
 
