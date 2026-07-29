@@ -73,13 +73,22 @@ export const reactivateProduct = asyncHandler(async (req, res) => {
     if (!product) throw new ApiError(404, 'Product not found');
     product.isAvailable = true;
     await product.save();
-    res.status(200).json({ success: true, message: 'Product reactivated', data:product });
+    res.status(200).json({ success: true, message: 'Product reactivated', data: product });
 });
 
 
 export const deleteProduct = asyncHandler(async (req, res) => {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findById(req.params.id);
     if (!product) throw new ApiError(404, 'Product not found');
+
+    if (product.image && product.image.length > 0) {
+        await Promise.all(
+            product.image.map((img) => cloudinary.uploader.destroy(img.public_id))
+        );
+    }
+
+    await Product.findByIdAndDelete(req.params.id);
+
     res.status(200).json({ success: true, message: 'Product permanently deleted' });
 });
 

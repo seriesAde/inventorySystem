@@ -249,3 +249,70 @@ export const getStockValuation = asyncHandler(async (req, res) => {
         data: valuation[0] || { totalValue: 0, items: [] },
     });
 });
+
+
+export const getMovementHistory = asyncHandler(async (req, res) => {
+    const filter = {};
+
+    if (req.query.product) filter.product = req.query.product;
+    if (req.query.warehouse) filter.warehouse = req.query.warehouse;
+    if (req.query.type) filter.type = req.query.type;
+
+    if (req.query.startDate || req.query.endDate) {
+        filter.createdAt = {};
+        if (req.query.startDate) filter.createdAt.$gte = new Date(req.query.startDate);
+        if (req.query.endDate) filter.createdAt.$lte = new Date(req.query.endDate);
+    }
+
+    const movements = await StockMovement.find(filter)
+        .populate('product')
+        .populate('warehouse')
+        .populate('performedBy')
+        .sort({ createdAt: -1 }); // most recent first
+
+    res.status(200).json({ success: true, count: movements.length, data: movements });
+});
+
+export const getMovementSummary = asyncHandler(async (req, res) => {
+    const matchStage = { type: 'sale' };
+
+    if (req.query.startDate || req.query.endDate) {
+        matchStage.createdAt = {};
+        if (req.query.startDate) matchStage.createdAt.$gte = new Date(req.query.startDate);
+        if (req.query.endDate) matchStage.createdAt.$lte = new Date(req.query.endDate);
+    }
+
+    const summary = await StockMovement.aggregate([
+        { $match: matchStage },
+        {
+            $group: {
+                _id: '$product',
+                totalSold: { $sum: { $abs: '$quantity' } }, // quantity is negative for sales, $abs makes it positive for reporting
+                movementCount: { $sum: 1 },
+            },
+        },
+        {
+            $lookup: {
+                from: 'products',
+                localField: '_id',
+                foreignField: '_id',
+                as: 'productInfo',
+            },
+        },
+        { $unwind: '$productInfo' },
+        {
+            $project: {
+                _id: 0,
+                product: '$productInfo.name',
+                sku: '$productInfo.sku',
+                totalSold: 1,
+                movementCount: 1,
+            },
+        },
+        { $sort: { totalSold: -1 } }, // fastest movers first; reverse with 1 for slowest
+    ]);
+
+    res.status(200).json({ success: true, data: summary });
+});
+
+
