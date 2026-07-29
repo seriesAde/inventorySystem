@@ -10,16 +10,7 @@
 set ALLOW_PROD_SEED=true
 
 
-  "data": {
-        "id": "6a6424057bc39a6241baded5",
-        "email": "adeshinaahmed60@gmail.com",
-        "name": "adeshina ahmed",
-        password: "12345678",
-        "role": "manager"}
-
-        <!-- first admin  -->
-        email:seriesade@gmail.com
-        password:admin123# inventorySystem
+  
 
 
 
