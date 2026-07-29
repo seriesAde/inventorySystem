@@ -116,3 +116,44 @@ Same shape as Warehouses — `/suppliers`, Admin+Manager for writes, Admin-only 
 | PATCH  | `/products/:id/reactivate`      | Admin, Manager, Storekeeper | Mark available                                      |
 | DELETE | `/products/:id`                 | Admin                       | Permanently delete                                  |
 | DELETE | `/products/:id/images/:imageId` | Admin, Manager, Storekeeper | Delete one product image                            |
+
+### Purchases
+
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| POST | `/purchases` | Admin, Manager, Storekeeper | Create a draft purchase |
+| GET | `/purchases` | Any logged-in user | List purchases |
+| GET | `/purchases/:id` | Any logged-in user | Get a purchase with its line items |
+| POST | `/purchases/:id/items` | Admin, Manager, Storekeeper | Add a line item (draft only) |
+| PATCH | `/purchases/:id/confirm` | Admin, Manager, Storekeeper | Confirm — atomically updates stock, sets Product.costPrice |
+| PATCH | `/purchases/:id/cancel` | Admin, Manager, Storekeeper | Cancel a draft purchase |
+
+### Sales
+
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| POST | `/sales` | Admin, Manager, Storekeeper | Create a draft sale |
+| GET | `/sales` | Any logged-in user | List sales |
+| GET | `/sales/:id` | Any logged-in user | Get a sale with its line items |
+| POST | `/sales/:id/items` | Admin, Manager, Storekeeper | Add a line item (draft only) |
+| PATCH | `/sales/:id/confirm` | Admin, Manager, Storekeeper | Confirm — atomically decrements stock (rejects if insufficient) |
+| PATCH | `/sales/:id/cancel` | Admin, Manager, Storekeeper | Cancel a draft sale |
+
+### Stock
+
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| GET | `/stocks` | Any logged-in user | Current stock levels (`?product=`, `?warehouse=` filters) |
+| GET | `/stocks/low` | Any logged-in user | Products at or below reorder threshold |
+| POST | `/stocks/adjust` | Admin, Manager | Create a stock adjustment (damage, loss, recount) |
+| GET | `/stocks/adjustment` | Any logged-in user | List stock adjustments |
+| GET | `/stocks/adjustment/:id` | Any logged-in user | Get a single adjustment |
+| POST | `/stocks/transfer` | Admin, Manager | Transfer stock between warehouses |
+
+### Reports
+
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| GET | `/stocks/valuation` | Any logged-in user | Total inventory value (`?warehouse=` filter) |
+| GET | `/stokas/movements` | Any logged-in user | Movement history (`?product=`, `?warehouse=`, `?type=`, `?startDate=`, `?endDate=`) |
+| GET | `/stocks/movement-summary` | Any logged-in user | Fastest/slowest movers by quantity sold (`?startDate=`, `?endDate=`) |
