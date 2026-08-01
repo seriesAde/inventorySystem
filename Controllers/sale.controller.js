@@ -39,7 +39,7 @@ export const getSales = asyncHandler(async (req, res) => {
 
 export const getSaleById = asyncHandler(async (req, res) => {
     const sale = await Sale.findById(req.params.id)
-        .populate('warehouse');
+        // .populate('warehouse');
     if (!sale) throw new ApiError(404, 'sales not found');
 
     const items = await SaleItem.find({ sale: sale._id }).populate('product');

@@ -54,7 +54,7 @@ asyncHandler(async () => {
     try {
         await connectDB();
         server = app.listen(env.port, () => {
-            console.log(`✅ Blog database running on port ${env.port} [${env.nodeEnv}]`)
+            console.log(`✅ database running on port ${env.port} [${env.nodeEnv}]`)
         })
     } catch (error) {
         console.error('❌ failed to connect: ', error.message)
